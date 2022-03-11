@@ -1,0 +1,118 @@
+Задача
+1.
+Установить библиотеки Paco_mqtt
+https://github.com/eclipse/paho.mqtt.c
+https://github.com/eclipse/paho.mqtt.cpp
+
+2. Установить CMake 
+инструкция:
+https://russianblogs.com/article/20431555143/
+откуда скачать:
+https://cmake.org/download/
+Название файла:
+cmake-3.23.0-rc2-windows-x86_64.msi
+
+Путь устнановки:
+C:\Program Files\CMake\
+
+Опции:
+Add syspath for all users
+
+Командная строка, от имени администратора?
+Заходим в папку 
+C:\Program Files\CMake\bin
+Вызываем утилиту: cmake-gui
+
+
+Указываем папку с исходниками библиотек paho.mqtt.c
+Создаем папку build внутри папки paho.mqtt.c
+Указываем среду в которой будем компиллировать библиотеки:
+Visual Studio 2008 - не компиллится 
+Visual Studio 2015 - ок
+
+CMAKE_INSTALL_PREFEX: 
+C:\Program Files (x86)\Eclipse Paho C
+
+Открываем Visual Studio 2015
+C:\Users\Andrey\Desktop\MQTT\03_10\paho.mqtt.c\build_VS15\ALL_BUILD.vcproj
+компиллится
+
+Устанавливаем GNU make  ?
+GNU make
+https://sourceforge.net/projects/gnuwin32/
+C:\Program Files (x86)\GnuWin32
+справка:
+https://www.gnu.org/software/software.html
+
+---- 
+Как собрать paho mqtt c++ на windows
+Инструкция:
+https://stackoverflow.com/questions/56455358/how-to-build-paho-mqtt-c-on-windows
+----
+Установка paho.mqtt.c
+
+вызываем командную строку от имени администратора, заходим в папку paho.mqtt.c
+выполняем команду:
+cmake --build build --target install
+
+Это установит paho.mqtt.c в C:\Program Files(x86)\Eclipse Paho C\
+
+----
+Установка paho.mqtt.cpp
+
+Процедура по своей природе такая же: откройте графический интерфейс CMake, выберите папку, содержащую исходный код, затем папку сборки и нажмите «Настроить».
+Теперь, поскольку paho.mqtt.cpp использует библиотеки из paho.mqtt.c, вы должны указать cmake, где найти соответствующие библиотеки paho.mqtt.c.
+Для этого настройте переменные PAHO_MQTT_C_INCLUDE_DIRSи PAHO_MQTT_C_LIBRARIES.
+PAHO_MQTT_C_INCLUDE_DIRS должен указывать на папку «include» внутри установки paho.mqtt.c, в моем случае:C:/Program Files (x86)/Eclipse Paho C/include
+PAHO_MQTT_C_LIBRARIES Я настроил так, чтобы указать на paho-mqtt3c.dll, в моем случае:C:/Program Files (x86)/Eclipse Paho C/bin/paho-mqtt3c.dll
+Остальные варианты я оставил нетронутыми.
+Наконец, вернитесь в командную строку разработчика, перейдите в папку paho.mqtt.cpp и запустите cmake --build build --target install.
+Если все пойдет хорошо, paho.mqtt.cpp будет установлен в C:/Program Files (x86)/paho-mqtt-cpp, в соответствии с переменной конфигурации CMAKE_INSTALL_PREFIX.
+
+C:\Program Files (x86)\Eclipse Paho C
+C:\Program Files (x86)\paho-mqtt-cpp
+Это установит paho.mqtt.c в C:\Program Files(x86)\paho-mqtt-cpp
+--------------------------------------
+
+Создание проекта в Visual Studio
+
+Путь к библиотекам:
+https://stackoverflow.com/questions/46182477/how-to-install-eclipse-paho-c
+
+
+Копируем папки 
+C:\Program Files (x86)\Eclipse Paho C\lib
+C:\Program Files (x86)\Eclipse Paho C\include
+в папку проекта
+
+Свойства проекта в Visual studio
+1.
+For header:
+c 
+general 
+additional include dir
+Указываем путь к папке \include
+
+2.
+Linker -> Input
+Linker -> Input you'll add the actual library files under Additional Dependencies.
+
+Properties
+Linker
+Input
+Additional Dependenceis
+вставить строку:  
+paho-mqtt3a.lib
+
+3.
+C/C++ -> Additional Include Directories.
+For the Header Files you'll also want to include their directories under C/C++ -> Additional Include Directories.
+Указываем путь к папке \lib
+
+Копируем код из файла C:\Program Files (x86)\Eclipse Paho C\share\doc\Eclipse Paho C\samples\MQTTAsync_publish.c
+
+в созданное консольное приложение
+Компиллируем.
+
+Чтобы запустить получившийся exe файл, нужно положить с ним рядом файл библиотеки 
+paho-mqtt3a.dll
